@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Visualization Dashboard</title>
+    <!-- Link to Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    />
+    <!-- Link to Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Internal CSS styles -->
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+
+      .container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Title of the Dashboard -->
+      <h1 class="mb-4">Data Visualization Dashboard</h1>
+      <!-- Filter Form -->
+      <form id="filterForm">
+        <!-- First Row of Filters -->
+        <div class="row mb-3">
+          <!-- End Year Input -->
+          <div class="col-md-6">
+            <label for="endYear" class="form-label">End Year:</label>
+            <input
+              type="number"
+              id="endYear"
+              name="Year"
+              class="form-control"
+            />
+          </div>
+          <!-- Likelihood Select -->
+          <div class="col-md-6">
+            <label for="likelihood" class="form-label">Likelihood:</label>
+            <select id="likelihood" name="Likelihood" class="form-select">
+              <option value="">Select</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <!-- Second Row of Filters -->
+        <div class="row mb-3">
+          <!-- Relevance Select -->
+          <div class="col-md-6">
+            <label for="relevance" class="form-label">Relevance:</label>
+            <select id="relevance" name="Relevance" class="form-select">
+              <option value="">Select</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <!-- Topics Select -->
+          <div class="col-md-6">
+            <label for="topics" class="form-label">Topics:</label>
+            <select id="topics" name="Topics" class="form-select">
+              <option value="">Select</option>
+              <option value="topic1">Topic 1</option>
+              <option value="topic2">Topic 2</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+        </div>
+        <!-- Third Row of Filters -->
+        <div class="row mb-3">
+          <!-- Sector Select -->
+          <div class="col-md-6">
+            <label for="sector" class="form-label">Sector:</label>
+            <select id="sector" name="Sector" class="form-select">
+              <option value="">Select</option>
+              <option value="sector1">Sector 1</option>
+              <option value="sector2">Sector 2</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+          <!-- Region Select -->
+          <div class="col-md-6">
+            <label for="region" class="form-label">Region:</label>
+            <select id="region" name="Region" class="form-select">
+              <option value="">Select</option>
+              <option value="region1">Region 1</option>
+              <option value="region2">Region 2</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+        </div>
+        <!-- Fourth Row of Filters -->
+        <div class="row mb-3">
+          <!-- PEST Select -->
+          <div class="col-md-6">
+            <label for="pest" class="form-label">PEST:</label>
+            <select id="pest" name="PEST" class="form-select">
+              <option value="">Select</option>
+              <option value="political">Political</option>
+              <option value="economic">Economic</option>
+              <option value="social">Social</option>
+              <option value="technological">Technological</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+          <!-- Source Select -->
+          <div class="col-md-6">
+            <label for="source" class="form-label">Source:</label>
+            <select id="source" name="Source" class="form-select">
+              <option value="">Select</option>
+              <option value="source1">Source 1</option>
+              <option value="source2">Source 2</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+        </div>
+        <!-- Fifth Row of Filters -->
+        <div class="row mb-3">
+          <!-- SWOT Select -->
+          <div class="col-md-6">
+            <label for="swot" class="form-label">SWOT:</label>
+            <select id="swot" name="SWOT" class="form-select">
+              <option value="">Select</option>
+              <option value="strength">Strength</option>
+              <option value="weakness">Weakness</option>
+              <option value="opportunity">Opportunity</option>
+              <option value="threat">Threat</option>
+              <!-- Add more options dynamically if needed -->
+            </select>
+          </div>
+          <!-- Country Input -->
+          <div class="col-md-6">
+            <label for="country" class="form-label">Country:</label>
+            <input
+              type="text"
+              id="country"
+              name="Country"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <!-- Sixth Row of Filters -->
+        <div class="row mb-3">
+          <!-- City Input -->
+          <div class="col-md-6">
+            <label for="city" class="form-label">City:</label>
+            <input type="text" id="city" name="City" class="form-control" />
+          </div>
+        </div>
+        <!-- Submit Button to Apply Filters -->
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+      </form>
+      <!-- Row for Charts -->
+      <div class="row mt-5">
+        <!-- Chart Columns -->
+        <div class="col-md-4">
+          <canvas id="intensityChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="likelihoodChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="relevanceChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="yearChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="countryChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="topicsChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="regionChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+          <canvas id="cityChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript code for fetching data and updating charts -->
+    <script>
+      document
+        .getElementById("filterForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          // Get filter values
+          const endYear = document.getElementById("endYear").value;
+          const likelihood = document.getElementById("likelihood").value;
+          const relevance = document.getElementById("relevance").value;
+          const topics = document.getElementById("topics").value;
+          const sector = document.getElementById("sector").value;
+          const region = document.getElementById("region").value;
+          const pest = document.getElementById("pest").value;
+          const source = document.getElementById("source").value;
+          const swot = document.getElementById("swot").value;
+          const country = document.getElementById("country").value;
+          const city = document.getElementById("city").value;
+          // Get other filter values similarly
+
+          // Fetch filtered data from backend
+          fetch(
+            `/api/data?Year=${endYear}&Likelihood=${likelihood}&Relevance=${relevance}&Topics=${topics}&Sector=${sector}&Region=${region}&PEST=${pest}&Source=${source}&SWOT=${swot}&Country=${country}&City=${city}`
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              // Prepare data for visualization
+              const yearLabels = data.map((item) => item.Year);
+              const intensityLabels = data.map((item) => item.Intensity);
+              const likelihoodLabels = data.map((item) => item.Likelihood);
+              const relevanceLabels = data.map((item) => item.Relevance);
+              const countryLabels = data.map((item) => item.Country);
+              const topicsLabels = data.map((item) => item.Topics);
+              const regionLabels = data.map((item) => item.Region);
+              const cityLabels = data.map((item) => item.City);
+
+              // Update charts with filtered data
+              updateChart(
+                intensityLabels,
+                "Intensity",
+                "intensityChart",
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 99, 132, 1)"
+              );
+              updateChart(
+                likelihoodLabels,
+                "Likelihood",
+                "likelihoodChart",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(54, 162, 235, 1)"
+              );
+              updateChart(
+                relevanceLabels,
+                "Relevance",
+                "relevanceChart",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(255, 206, 86, 1)"
+              );
+              updateChart(
+                yearLabels,
+                "Year",
+                "yearChart",
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(255, 99, 132, 1)"
+              );
+              updateChart(
+                countryLabels,
+                "Country",
+                "countryChart",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(54, 162, 235, 1)"
+              );
+              updateChart(
+                topicsLabels,
+                "Topics",
+                "topicsChart",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(255, 206, 86, 1)"
+              );
+              updateChart(
+                regionLabels,
+                "Region",
+                "regionChart",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(75, 192, 192, 1)"
+              );
+              updateChart(
+                cityLabels,
+                "City",
+                "cityChart",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(153, 102, 255, 1)"
+              );
+            })
+            .catch((error) => {
+              console.error("Error fetching filtered data:", error);
+            });
+        });
+
+      // Function to update chart
+      function updateChart(
+        labels,
+        label,
+        chartId,
+        backgroundColor,
+        borderColor
+      ) {
+        var ctx = document.getElementById(chartId).getContext("2d");
+        var myChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: label,
+                data: Array.from(
+                  labels
+                    .reduce(
+                      (acc, val) => acc.set(val, (acc.get(val) || 0) + 1),
+                      new Map()
+                    )
+                    .values()
+                ), // Count occurrences for each label
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
